@@ -7,19 +7,27 @@ module ScreenSaver
       @color = color
     end
 
-    def reserved? @reserved end
+    def reserved?
+      @reserved
+    end
+
+    def reserve
+      @reserved = true
+    end
+
+    def free
+      @reserved = false
+    end
 
     def draw
       Gosu.draw_rect(@x * @cell_size, @y * @cell_size, @cell_size, @cell_size, @color)
     end
 
-    # def self.random_color
-    #   red   = rand(100..175)
-    #   green = rand(100..175)
-    #   blue  = rand(100..175)
-    #   alpha = 250#rand(200..255)
+    def self.random_color
+      cr = rand(100..180)
+      alpha = 240
 
-    #   Gosu::Color.rgba(red, green, blue, alpha)
-    # end
+      Gosu::Color.rgba(cr, cr, cr, alpha)
+    end
   end
 end

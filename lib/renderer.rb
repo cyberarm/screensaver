@@ -1,5 +1,6 @@
 module ScreenSaver
   class Renderer
+    attr_reader :cell_size, :columns, :rows
     def initialize(cell_size:, percent_changed_per_frame: 0.0055)
       @cell_size = cell_size
       @percent_changed_per_frame = percent_changed_per_frame
@@ -14,6 +15,12 @@ module ScreenSaver
       @colorizers << @red   = Colorizer.new(min: 100, max: 200)
       @colorizers << @green = Colorizer.new(min: 100, max: 180)
       @colorizers << @blue  = Colorizer.new(min: 100, max: 180)
+
+      @frames = []
+    end
+
+    def add_frame(frame)
+      @frames << frame
     end
 
     def generate_grid
@@ -36,6 +43,7 @@ module ScreenSaver
       end
 
       @colorizers.each(&:update)
+      @frames.each(&:update)
     end
 
     def next_color
