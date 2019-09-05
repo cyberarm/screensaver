@@ -31,6 +31,7 @@ module ScreenSaver
     def update
       color = next_color
       @tiles.sample(@tiles.size * @percent_changed_per_frame).each do |tile|
+        next if tile.reserved?
         tile.color = color
       end
 

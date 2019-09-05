@@ -7,6 +7,8 @@ module ScreenSaver
       @color = color
     end
 
+    def reserved? @reserved end
+
     def draw
       Gosu.draw_rect(@x * @cell_size, @y * @cell_size, @cell_size, @cell_size, @color)
     end
