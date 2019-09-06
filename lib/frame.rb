@@ -37,7 +37,9 @@ module ScreenSaver
         @x -= 1
         if @x <= -(@image.width + 1)
           @x = @renderer.columns + 1
-          @y = rand(0..@renderer.rows)
+
+          pos = (@renderer.rows - @image.height)
+          @y = pos < 0 ? rand(pos..0) : rand(0..pos)
         end
       end
     end
@@ -75,7 +77,7 @@ module ScreenSaver
 
       def sample(x, y)
         r, g, b, a = @data[(@width * y + x) * 4, 4]
-        Gosu::Color.new(a, r, g, b)
+        Gosu::Color.new(a.ord, r.ord, g.ord, b.ord)
       end
     end
   end

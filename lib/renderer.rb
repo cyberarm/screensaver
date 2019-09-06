@@ -10,6 +10,7 @@ module ScreenSaver
 
       @tiles = []
       generate_grid
+      @all_set_once = false
 
       @colorizers = []
       @colorizers << @red   = Colorizer.new(min: 100, max: 200)
@@ -36,10 +37,13 @@ module ScreenSaver
     end
 
     def update
-      color = next_color
-      @tiles.sample(@tiles.size * @percent_changed_per_frame).each do |tile|
-        next if tile.reserved?
-        tile.color = color
+      if @all_set_once
+        update_tiles(@tiles)
+      else
+        tiles = @tiles.select{ |tile| tile.color == Gosu::Color::NONE}
+        update_tiles(tiles, true)
+
+        @all_set_once = true if tiles.size == 0
       end
 
       @colorizers.each(&:update)
@@ -48,6 +52,16 @@ module ScreenSaver
 
     def next_color
       Gosu::Color.rgba(@red.value, @green.value, @blue.value, 240)
+    end
+
+    def update_tiles(array, new_color_for_each_tile = false)
+      color = next_color
+
+      array.sample((@tiles.size * @percent_changed_per_frame).ceil).each do |tile|
+        color = next_color if new_color_for_each_tile
+        next if tile.reserved?
+        tile.color = color
+      end
     end
 
     def tile_at?(x, y)
